@@ -25,23 +25,15 @@ const POCKETBASE_API_URL = getPocketBaseUrl();
 // Create PocketBase client
 const pocketbaseClient = new Pocketbase(POCKETBASE_API_URL);
 
-// Add error handler for connection issues
-pocketbaseClient.on('error', (error) => {
-    console.error('❌ PocketBase Connection Error:', error);
-});
-
-// Log successful connection
-pocketbaseClient.on('login', () => {
-    console.log('✅ Connected to PocketBase');
-});
-
 // Verify connection on startup (non-blocking)
+// Note: .on() method is not available in this PocketBase SDK version
+// Connection errors will be handled in each API call
 (async () => {
     try {
         const health = await pocketbaseClient.health.check();
-        console.log('🏥 PocketBase Health:', health);
+        console.log('✅ PocketBase Health Check Passed:', health);
     } catch (error) {
-        console.error('⚠️ PocketBase not responding yet:', error.message);
+        console.warn('⚠️ PocketBase not responding yet:', error.message);
         console.log('📌 Make sure PocketBase is running on:', POCKETBASE_API_URL);
     }
 })();
